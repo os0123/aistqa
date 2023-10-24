@@ -1,0 +1,6 @@
+1) selenium server standalone jar file is required for executing practicals of STQA.
+2) jxl jar file is required for executing practicals 5 & 6 of STQA.
+3) log4j jar file is used for logging audit(not mandatory).
+4) chrome-win64 is latest version of chrome browser for testing the STQA practicals.
+5) chromedriver-win64 is the driver required to run the STQA practicals.
+6) balance-scale.data is required for executing practicals 8 & 9 of AI.
