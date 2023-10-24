@@ -1,0 +1,365 @@
+PRACTICAL N0.1
+AIM:
+Implementation of Simple Search 1 Algorithm
+CODE:
+import random
+Open=['S']
+map_list={'S':['A','B','C'],
+          'A':['S','D'],
+          'B':['S','E'],
+          'C':['S','F'],
+          'D':['A','G'],
+          'E':['B','G','F'],
+          'F':['C','E'],
+          'G':['D','E'] }
+def neigbor(node):
+    return map_list[node]
+def goaltest(node):
+    return node=='G'
+def main():
+    while len(Open)>0:
+        random.shuffle(Open)
+        N=Open.pop()
+        if goaltest(N):
+            return "Found"
+        else:
+            n=neigbor(N)
+            for node in n:
+                if node not in Open:
+                    Open.append(node)
+            print("Open_Lists",Open)
+    return "Not Found"
+print(main())
+        
+ PRACTICAL N0.2
+AIM:
+Implementation of Simple Search 2 Algorithm
+CODE:
+import random
+open=['S']
+closed=[]
+map_list={'S':['A','B','C'],
+          'A':['S','D'],
+          'B':['S','E'],
+          'C':['S','F'],
+          'D':['A','G'],
+          'E':['B','G','F'],
+          'F':['C','E'],
+          'G':['D','E'] }
+def neigh (node):
+    return map_list[node]
+def goaltest(node):
+    return node=='G'
+def main():
+    while len(open)>0:
+        random.shuffle(open)
+        N=open.pop()
+        if goaltest(N):
+            return "Found"
+        else:
+            n=neigh(N)
+            for node in n:
+                if node not in open:
+                    open.append(node)
+            print("Open_Lists",open)
+            print("closed_list",closed)
+    return "Not found"
+print(main())
+
+PRACTICAL N0.3
+AIM:
+Implementation of Simple Search 3 Algorithm
+CODE:
+
+import random
+
+OPEN=[['S',None]]
+CLOSED=[]
+map_list={'S':['A','B','C'],
+          'A':['S','D'],
+          'B':['S','E'],
+          'C':['S','F'],
+          'D':['A','G'],
+          'E':['B','G','F'],
+          'F':['C','E'],
+          'G':['D','E'] }
+
+def movegen(node):
+    return map_list[node]
+def goaltest(node):
+    return node=='G'
+def returnpath(path):
+    if path is not None:
+        return str(path[0])
+        returnpath(path[1])
+    else:
+        return " "
+def ss3():
+    while len(OPEN)>0:
+        random.shuffle(OPEN)
+        print("OpenList",OPEN)
+        M=OPEN.pop()
+        N=M[0]
+        CLOSED.append(N)
+        print("Picked: ",CLOSED)
+        if goaltest(N):
+            print("GoalFound")
+            print("Path",returnpath(M)[::1])
+            return
+        else:
+            neigh=movegen(N)
+            for node in neigh:
+                if node not in CLOSED and node not in OPEN:
+                    new_list=[node,M]
+                    OPEN.append(new_list)
+    print("Not Found")
+print(ss3())
+
+
+PRACTICAL NO.4
+AIM:
+Implement Breadth first search algorithm for some map problem.  
+CODE:
+
+graph={'S':['A','B','C'],
+       'A':['S','D'],
+       'B':['S','E'],
+       'C':['S','F'],
+       'D':['A','G'],
+       'E':['B','G','F'],
+       'F':['C','E'],
+       'G':['D','E']}
+visited=[]
+queue=[]
+
+def bfs(visited, graph, node):
+    visited.append(node)
+    queue.append(node)
+    while queue:
+        m=queue.pop(0)
+        print(m,end=" ")
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+print("Following is the Breadth-First Serach: ")
+bfs(visited,graph,'S')
+
+
+PRACTICAL NO.5
+AIM:
+Implement Iterative deep depth first search for some map problem.  
+CODE:
+graph={'S':['A','B','C'],
+       'A':['S','D'],
+       'B':['S','E'],
+       'C':['S','F'],
+       'D':['A','G'],
+       'E':['B','G','F'],
+       'F':['C','E'],
+       'G':['D','E']}
+
+
+visited=[]
+def dfs(visited,graph,node):
+    if node not in visited:
+        print(node)
+        visited.append(node)
+        for neigh in graph[node]:
+            dfs(visited,graph,neigh)
+print(dfs(visited,graph,'S'))
+
+PRACTICAL NO.6
+AIM:
+Implement A* search algorithm for some map problem.  
+
+nodeList = {'mumbai':[('delhi',1200),('nashik',350),('goa',800),('pune',130)],
+            'delhi' : [('nashik',375),('mumbai',1200)],
+            'nashik':[('indore',600),('delhi',375),('mumbai',350),('nagpur',600)],
+            'indore':[('nashik',600)],
+            'nagpur':[('nashik',600),('pune',450)],
+            'pune':[('mumbai',130),('nagpur',450),('blore',550)],
+            'blore':[('hyd',110),('goa',750)],
+            'goa':[('blore',750),('hyd',850),('mumbai',800)],
+            'hyd':[('blore',110),('goa',850)]}
+hd = {'mumbai' : 790, 'delhi' : 1515, 'nashik' : 1140, 'indore' : 1540, 'nagpur' : 1110, 'pune' : 660, 'blore' : 110, 'goa' : 850, 'hyd' : 0}
+
+
+#start node mumbai
+#end node hyd
+#hd for mumbai hf1->delhi->nashik->indore->nashik->delhi->infinite loop
+#hf2->nashik->nagpur->pune->blore->hyd -> 350+600+450+550+110=2060
+#hf3->goa-> blore->hyd-> 800+750+110=1660
+#hf4->pune-> blore->hyd-> 130+550+110=790
+
+openList = [('mumbai', 700)]
+closedList=[]
+
+def goalTest (node) :
+    return node == 'hyd'
+def moveGen (node) :
+    return nodeList[node[0]]
+def sort(mylist):
+    for i in range(len(mylist)):
+        for j in range(0,len(mylist)-i-1):
+            temp = mylist[j]
+            mylist[j] = mylist[j+1]
+            mylist[j+1] = temp
+            
+def AStar():
+    while(len(openList) > 0):
+        sort(openList)
+        print("Open List Contains",openList)
+        node = openList.pop(0)
+        closedList.append((node[0], hd[node[0]]))
+        print("Picked node:",node)
+        if(goalTest(node[0])):
+            return "Goal Found"
+        else:
+            neighbours = moveGen(node)
+            print("Neighbours of",node,"are",neighbours)
+            for node in neighbours:
+                if node not in openList and node[0] not in closedList[0]:
+                    tup = (node[0], (node[1] + hd[node[0]]))
+                #tup=(delhi,1200+1515)
+                #print (tup)
+                openList.append(tup)
+                
+    return "Goal Not found"
+AStar()                
+
+PRACTICAL NO.7
+AIM:
+Implement recursive best-first search algorithm for some map problem.  
+CODE
+map_list={'Mumbai': [('Pune',750),('Delhi',1500),('Goa',1300)],
+          'Goa':[('Mumbai',1200)],
+          'Delhi':[('Mumbai',1200),('Guwahati',100),('Pune',750)],
+          'Chennai':[('Pune',750)],
+          'Kolkata': [('Guwahati',100),('Pune',750)],
+          'Pune':[('Mumbai',1200),('Kolkata',0),('Chennai',1600),('Delhi',1500)],
+          'Guwahati': [('Delhi',100),('Kolkata',750)],     
+         }
+
+OPEN=[[('Mumbai',1200),None]]
+CLOSED=[]
+
+def movegen(node):
+    return map_list[node]
+def goaltest(node):
+    return node=='Kolkata'
+final=[]
+def reconstructpath(path):
+    if path is None:
+        return ""
+    else:
+        final.append(path[0][0])
+        reconstructpath(path[1])
+        return final
+    
+def sort(a):
+    for i in range(len(a)):
+        for j in range(0,len(a)-i-1):
+            if((a[j][0][1])>a[j+1][0][1]):
+                (a[j],a[j+1])=(a[j+1],a[j])
+    return a
+def best():
+    while len(OPEN)>0:
+        print("Open list: ",OPEN)
+        x=sort(OPEN)
+        seen=x.pop(0)
+        N=seen[0][0]
+        CLOSED.append(N)
+        print("Closed list contains: ",CLOSED)
+        print("Node Picked: ",N)
+        if goaltest(N):
+            print(reconstructpath(seen)[::-1])
+            return "Found"
+        else:
+            neigh=movegen(N)
+            for i in neigh:
+                if i[0] not in CLOSED and i  not in OPEN:
+                    new=[i,seen]
+                    OPEN.append(new)
+    return "Not Found"
+best()
+
+PRACTICAL NO.8
+AIM:
+Implement decision tree learning algorithm 
+CODE:
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import tree
+balance_data=pd.read_csv('C:/Users/sies/Desktop/balance-scale.data',sep=',',header=None)
+print("Dataset Length:",len(balance_data))
+print("Dataset Shape:",balance_data.shape)
+print(balance_data.head())
+
+X=balance_data.values[:,1:5]
+Y=balance_data.values[:,0]
+
+X_train,X_test,y_train,y_test=train_test_split(X,Y,test_size=0.4,random_state=100)
+
+clf_entropy=DecisionTreeClassifier(criterion="entropy",random_state=100,max_depth=3,min_samples_leaf=5 )
+clf_entropy.fit(X_train,y_train)
+
+clf_gini=DecisionTreeClassifier(criterion="gini",random_state=100,max_depth=3,min_samples_leaf=5 )
+clf_gini.fit(X_train,y_train)
+print(y_test)
+y_pred_en=clf_entropy.predict(X_test)
+y_prend_gini=clf_gini.predict(X_test)
+print(y_pred_en)
+print(y_prend_gini)
+accuracy_score(y_pred_en,y_test)*100
+
+PRACTICAL NO.9
+AIM:
+To Implement Support Vector Machine Algorithm in Python 
+CODE:
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+balance_data=pd.read_csv('C:/Users/sies/Desktop/balance-scale.data',sep=',',header=None)
+print("Dataset Length:",len(balance_data))
+print("Dataset Shape:",balance_data.shape)
+print(balance_data.head())
+
+X=balance_data.values[:,1:5]
+Y=balance_data.values[:,0]
+
+X_train,X_test,y_train,y_test=train_test_split(X,Y,test_size=0.3,random_state=100)
+svclassifier=SVC(kernel='linear')
+svclassifier.fit(X_train,y_train)
+print(y_test)
+y_pred=svclassifier.predict(X_test)
+print(y_pred)
+print(accuracy_score(y_pred,y_test)*100)
+
+PRACTICAL NO.10
+AIM:
+Implement Adaboost ensemble learning algorithm 
+CODE
+import pandas
+from sklearn import model_selection
+from sklearn.ensemble import AdaBoostClassifier
+url="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names=["preg","plas","pres","skin","test","mass","pedi","age","class"]
+dataframe=pandas.read_csv(url,names=names)
+array= dataframe.values
+X= array[:,0:8]
+Y= array[:,8]
+seed=7
+num_trees=30
+kfold=model_selection.KFold(n_splits=10)
+model=AdaBoostClassifier(n_estimators=num_trees,random_state=seed)
+results=model_selection.cross_val_score(model,X,Y,cv=kfold)
+print(results.mean()*100)
+
